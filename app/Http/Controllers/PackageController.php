@@ -17,8 +17,8 @@ class PackageController extends Controller
     {
         return Inertia::render('packages/Index', [
             'packages' => Package::query()
+                ->with('mode')
                 ->withCount('reservations')
-                ->orderBy('name')
                 ->get(['id', 'name']),
         ]);
     }

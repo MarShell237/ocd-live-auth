@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Override;
 
 /**
  * @property int $id
@@ -16,7 +17,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name'])]
+#[Fillable(['name', 'description', 'price', 'duration', 'offers'])]
 class Package extends Model
 {
     /** @use HasFactory<PackageFactory> */
@@ -30,5 +31,15 @@ class Package extends Model
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function mode(){
+        return $this->belongsTo(Mode::class);
+    }
+
+    #[Override]
+    protected function casts(): array
+    {
+    	return ['offers' => 'array'];
     }
 }

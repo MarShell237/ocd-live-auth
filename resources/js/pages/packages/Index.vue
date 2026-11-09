@@ -7,6 +7,11 @@ import { index } from '@/routes/packages';
 type PackageItem = {
     id: number;
     name: string;
+    description: string;
+    price: int;
+    duration: int;
+    offers: array;
+    mode: array;
     reservations_count: number;
 };
 

@@ -14,11 +14,6 @@ class ReservationSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            ModeSeeder::class,
-            PackageSeeder::class,
-        ]);
-
         if (Reservation::query()->exists()) {
             return;
         }

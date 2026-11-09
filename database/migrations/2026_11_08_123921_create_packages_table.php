@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Mode;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,12 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Mode::class)->constrained();
             $table->string('name');
+            $table->string('description');
+            $table->integer('price');
+            $table->integer('duration');
+            $table->json('offers');
             $table->timestamps();
         });
     }

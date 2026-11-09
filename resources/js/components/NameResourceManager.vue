@@ -117,6 +117,31 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             <th
                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
+                                Mode
+                            </th>
+                            <th
+                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            >
+                                Description
+                            </th>
+                            <th
+                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            >
+                                Prix
+                            </th>
+                            <th
+                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            >
+                                Duree
+                            </th>
+                            <th
+                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            >
+                                Offres
+                            </th>
+                            <th
+                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            >
                                 Réservations
                             </th>
                             <th class="px-6 py-3">
@@ -130,6 +155,9 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             :key="item.id"
                             class="border-b border-[#EDE9E1] last:border-b-0 dark:border-neutral-800"
                         >
+                            <td class="px-6 py-4">
+                                {{ item.mode.name}}
+                            </td>
                             <td class="px-6 py-4">
                                 <Form
                                     v-if="editingId === item.id"
@@ -182,12 +210,26 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             </td>
 
                             <td class="px-6 py-4">
-                                <Badge variant="secondary" class="font-normal">
+                                {{ item.description }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ item.price}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ item.duration}}
+                            </td>
+                            <td class="px-6 py-4">
+                                <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-200">
+                                    <li v-for="offer in item.offers">{{offer}}</li>
+                                </ul>
+                            </td>
+                            <td class="px-6 py-4">
+                                <!-- <Badge variant="secondary" class="font-normal"> -->
                                     {{ item.reservations_count }}
-                                    réservation{{
-                                        item.reservations_count > 1 ? 's' : ''
-                                    }}
-                                </Badge>
+                                    <!-- réservation{{ -->
+                                        <!-- item.reservations_count > 1 ? 's' : '' -->
+                                    <!-- }} -->
+                                <!-- </Badge> -->
                             </td>
 
                             <td class="px-6 py-4 text-right whitespace-nowrap">
