@@ -4,6 +4,7 @@ use App\Models\Mode;
 use App\Models\Package;
 use App\Models\Reservation;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('guests are redirected to the login page', function () {
@@ -68,21 +69,29 @@ test('the dashboard displays the reservation statistics and recent reservations'
             ->where('stats.today', 1)
             ->where('stats.freeSlots', 1)
             ->has('reservations', 5)
-            ->where('reservations.0.package', 'Premium')
-            ->where('reservations.0.status', 'confirmed')
-            ->where('reservations.0.reference', fn (string $reference) => str_starts_with($reference, 'OCD-'))
+            ->where('reservations', function (Collection $reservations): bool {
+                $statuses = $reservations->pluck('status');
+
+                return $statuses->filter(fn (string $status) => $status === 'confirmed')->count() === 2
+                    && $statuses->filter(fn (string $status) => $status === 'pending')->count() === 2
+                    && $statuses->filter(fn (string $status) => $status === 'cancelled')->count() === 1
+                    && $reservations->every(
+                        fn (array $reservation): bool => $reservation['package'] === 'Premium'
+                            && str_starts_with($reservation['reference'], 'OCD-'),
+                    );
+            })
         );
 });
 
-test('the dashboard only displays the five most recent reservations', function () {
+test('the dashboard displays up to thirty reservations', function () {
     $user = User::factory()->create();
 
-    Reservation::factory()->count(7)->create();
+    Reservation::factory()->count(31)->create();
 
     $this->actingAs($user)
         ->get(route('dashboard'))
         ->assertInertia(fn (Assert $page) => $page
             ->component('Dashboard')
-            ->has('reservations', 5)
+            ->has('reservations', 30)
         );
 });

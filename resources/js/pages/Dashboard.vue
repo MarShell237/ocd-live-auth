@@ -117,7 +117,7 @@ const filteredReservations = computed(() => {
         return matchesStatus && matchesSearch;
     });
 });
-const confirmReservation = (id) => {
+const confirmReservation = (id: number) => {
     router.patch(`/reservations/${id}/confirm`, {}, {
         preserveScroll: true, // Évite de remonter en haut de la page après l'action
         onSuccess: () => {
@@ -125,7 +125,7 @@ const confirmReservation = (id) => {
         }
     });
 };
-const cancel = (id) => {
+const cancel = (id: number) => {
     router.patch(`/reservations/${id}/cancel`, {}, {
         preserveScroll: true, // Évite de remonter en haut de la page après l'action
         onSuccess: () => {

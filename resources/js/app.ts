@@ -8,7 +8,7 @@ import { initializeFlashToast } from '@/lib/flashToast';
 const appName = import.meta.env.VITE_APP_NAME || 'OCD Live';
 
 void createInertiaApp({
-    title: (title) => (appName),
+    title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
             case name === 'Welcome':
