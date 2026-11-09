@@ -19,14 +19,15 @@ class ReservationFactory extends Factory
      */
     public function definition(): array
     {
+$is_confirm = fake()->boolean();
         return [
             'nom' => fake()->name(),
             'business' => fake()->company(),
             'mode_id' => Mode::factory(),
             'package_id' => Package::factory(),
             'creneau' => fake()->dateTimeBetween('now', '+3 months'),
-            'is_confirm' => false,
-            'is_cancelled' => false,
+            'is_confirm' => $is_confirm,
+            'is_cancelled' => $is_confirm ? false : fake()->boolean(),
         ];
     }
 }

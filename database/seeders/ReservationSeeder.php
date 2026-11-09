@@ -27,7 +27,7 @@ class ReservationSeeder extends Seeder
         $packageIds = Package::query()->pluck('id');
 
         Reservation::factory()
-            ->count(30)
+            ->count(130)
             ->create([
                 'mode_id' => fn (): int => $modeIds->random(),
                 'package_id' => fn (): int => $packageIds->random(),
