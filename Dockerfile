@@ -43,4 +43,4 @@ COPY --chown=www-data:www-data . /var/www/html
 COPY --from=frontend-builder --chown=www-data:www-data /app/public/build /var/www/html/public/build
 
 USER www-data
-RUN composer install --prefer-dist --optimize-autoloader --no-dev --no-interaction
+RUN composer install --prefer-dist --optimize-autoloader --no-interaction
