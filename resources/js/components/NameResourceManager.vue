@@ -155,8 +155,8 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             :key="item.id"
                             class="border-b border-[#EDE9E1] last:border-b-0 dark:border-neutral-800"
                         >
-                            <td class="px-6 py-4">
-                                {{ item.mode.name}}
+                            <td v-if="item?.mode" class="px-6 py-4">
+                                <!-- {{ item.mode.name}} -->
                             </td>
                             <td class="px-6 py-4">
                                 <Form
