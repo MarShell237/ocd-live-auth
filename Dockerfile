@@ -1,27 +1,46 @@
-FROM node:20-alpine AS frontend-builder
+# ==========================================
+# Étape 1 : Build du frontend (PHP + Node)
+# ==========================================
+FROM serversideup/php:8.5-cli AS frontend-builder
 
-# PHP + extensions Laravel needs to boot artisan
-RUN apk add --no-cache \
-    php84 php84-phar php84-mbstring php84-openssl php84-tokenizer \
-    php84-xml php84-dom php84-xmlwriter php84-simplexml php84-ctype \
-    php84-fileinfo php84-session php84-pdo php84-iconv php84-curl \
-    composer \
- && ln -sf /usr/bin/php84 /usr/bin/php
+USER root
+
+# Node.js depuis l'image officielle
+COPY --from=node:22-slim /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:22-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+ && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
+RUN install-php-extensions intl bcmath gd
 
 WORKDIR /app
 
-# PHP deps first (cache-friendly)
+# Dépendances PHP (Wayfinder a besoin de vendor/ + artisan)
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist
+RUN composer install --prefer-dist --no-interaction --no-scripts
 
-# JS deps
+# Dépendances JS
 COPY package*.json ./
 RUN npm ci
 
-# Full source, then boot-able env for artisan
+# Sources + .env minimal pour que artisan démarre
 COPY . .
-RUN composer dump-autoload --no-dev --optimize \
+RUN composer dump-autoload --optimize \
  && cp .env.example .env \
  && php artisan key:generate --force
 
 RUN npm run build
+
+# ==========================================
+# Étape 2 : Image de production
+# ==========================================
+FROM serversideup/php:8.5-frankenphp
+
+USER root
+RUN install-php-extensions intl bcmath pdo_pgsql pdo_mysql gd
+
+COPY --chown=www-data:www-data . /var/www/html
+COPY --from=frontend-builder --chown=www-data:www-data /app/public/build /var/www/html/public/build
+
+USER www-data
+RUN composer install --prefer-dist --optimize-autoloader --no-dev --no-interaction
