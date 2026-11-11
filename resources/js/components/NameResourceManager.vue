@@ -114,27 +114,28 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             >
                                 Nom
                             </th>
-                            <th
+                            <th v-if="items[0].mode"
                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
                                 Mode
                             </th>
-                            <th
+                            <th v-if="items[0].mode"
                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
                                 Description
                             </th>
-                            <th
-                                class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
+                            <th v-if="items[0].mode"
+                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
                                 Prix
                             </th>
                             <th
+                                v-if="items[0].mode"
                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
                                 Duree
                             </th>
-                            <th
+                            <th v-if="items[0].mode"
                                 class="px-6 py-3 text-[11px] font-semibold tracking-wider text-neutral-400 uppercase"
                             >
                                 Offres
@@ -156,7 +157,7 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                             class="border-b border-[#EDE9E1] last:border-b-0 dark:border-neutral-800"
                         >
                             <td v-if="item?.mode" class="px-6 py-4">
-                                <!-- {{ item.mode.name}} -->
+                                {{ item.mode.name}}
                             </td>
                             <td class="px-6 py-4">
                                 <Form
@@ -209,16 +210,16 @@ const isUsed = (item: ResourceItem): boolean => item.reservations_count > 0;
                                 </span>
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td v-if="item?.mode" class="px-6 py-4">
                                 {{ item.description }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td v-if="item?.mode" class="px-6 py-4">
                                 {{ item.price}}
                             </td>
-                            <td class="px-6 py-4">
+                            <td v-if="item?.mode" class="px-6 py-4">
                                 {{ item.duration}}
                             </td>
-                            <td class="px-6 py-4">
+                            <td v-if="item?.mode" class="px-6 py-4">
                                 <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-200">
                                     <li v-for="offer in item.offers">{{offer}}</li>
                                 </ul>
