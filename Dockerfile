@@ -1,7 +1,11 @@
 # ==========================================
-# Étape 1 : Build du Frontend (Vue.js / Vite)
+# Étape 1 : Build du Frontend (Node.js + PHP pour Wayfinder)
 # ==========================================
 FROM node:20-alpine AS frontend-builder
+
+# Installation de PHP et des extensions minimales pour que les commandes Artisan fonctionnent pendant le build Vite
+RUN apk add --no-cache php php-cli php-mbstring php-openssl php-tokenizer php-xml php-ctype php-fileinfo
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -15,7 +19,7 @@ FROM serversideup/php:8.4-frankenphp
 
 USER root
 
-# Installation des extensions PHP nécessaires (ajoutez gd, pdo_pgsql ou pdo_mysql selon votre base de données)
+# Installation des extensions PHP nécessaires pour la production
 RUN install-php-extensions intl bcmath pdo_pgsql pdo_mysql gd
 
 COPY --chown=www-data:www-data . /var/www/html
